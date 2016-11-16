@@ -1,0 +1,64 @@
+<html ng-app='myApp'>
+	<head>
+		<script src="node_modules/angular/angular.js"></script>
+		<script type='text/javascript'>
+			var myAppModule = angular.module('myApp', []);
+			myAppModule.factory('productFactory', function(){
+				var products = [
+				{name: 'keyboard', price: 149.99},
+				{name: 'mouse', price: 59.99},
+				{name: 'basketball', price: 59.99}];
+				var factory = {};
+			factory.getProducts = function(callback){
+				callback(products);
+			}
+			return factory;
+		});
+			myAppModule.controller('productsController', ['$scope', 'productFactory', function($scope, productFactory){
+				$scope.products = [];
+				productFactory.getProducts(function(data){
+					$scope.products = data;
+				});
+
+				$scope.addProduct = function (){
+    		    $scope.products.push($scope.product); 
+    		    $scope.product = {};
+    		  	};
+
+          		$scope.deleteProduct = function (product){
+            	index = $scope.products.indexOf(product);
+            	$scope.products.splice(index, 1);
+          		};
+
+		}])
+			
+		</script>
+	</head>
+	<body>
+		<div ng-controller='productsController'>
+			<h1>Products Controller</h1>
+			<form>
+				<p>Product Name:<input type='text' ng-model='product.name'></p>
+				<p>Product Price:<input type='text' ng-model='product.price'></p>
+				<input type='submit' value='Add Product' ng-click='addProduct()'>
+	      	</form> 
+	      	<table>  
+	    	<tr>
+	          	<th>Name</th>
+	          	<th>Price</th>
+	          	<th>Actions</th>
+	        </tr>
+	        <tr ng-repeat="product in products">
+	          	<td>{{product.name}}</td>
+	          	<td>{{product.price}}</td>
+	          	<td><input type='submit' value='Delete Product' ng-click='deleteProduct(product)'></td>
+	        </tr>	
+	    	</table>
+  		</div>
+
+
+
+
+
+	</body>
+</html>
